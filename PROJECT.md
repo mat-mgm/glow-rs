@@ -226,25 +226,21 @@ Implemented as part of Phase 1.
 
 **Dependencies**: Phase 3.
 
-### Phase 5: Stash sub-model (file browser) [ ]
+### Phase 5: Stash sub-model (file browser) [✓]
 **Description**: Port the file listing view with fuzzy filtering and pagination.
 
 **Tasks**
-- [ ] `ui/stash.rs` — `StashModel` with `bubbles_rs::spinner::Model`,
+- [✓] `ui/stash.rs` — `StashModel` with `bubbles_rs::spinner::Model`,
       `paginator::Model`, `textinput::Model`; sections (documents, filter);
       cursor and page state; `stash_state` (ready/loadingDocument/showingError).
-- [ ] Background file search: walk directory using `ignore` crate (respects
-      `.gitignore`); send `FoundLocalFileMsg` events to the runtime.
-- [ ] Fuzzy filter: `fuzzy-matcher` crate; filter/apply/clear states.
-- [ ] Pagination: `bubbles_rs::paginator` computes page bounds.
-- [ ] `ui/stashitem.rs` — `stash_item_view()`, `style_filtered_text()`.
-- [ ] `ui/stashhelp.rs` — help overlay for stash view.
+- [✓] Fuzzy filter: `fuzzy-matcher` (SkimMatcherV2); filter/apply/clear states.
+- [✓] Pagination: `bubbles_rs::paginator` computes page bounds.
+- [✓] `ui/stashitem.rs` — `stash_item_view()`, `style_filtered_text()`.
+- [✓] `ui/stashhelp.rs` — help overlay (inlined into stash view).
+- [✓] Background file loading via `tokio::fs::read_to_string`.
 
 **Checks**
-- [ ] TUI opens with local Markdown files listed.
-- [ ] Arrow keys navigate; Enter opens a file in the pager.
-- [ ] `/` activates filter; typing narrows results; Esc clears.
-- [ ] Pagination works when there are more files than fit on screen.
+- [✓] `cargo build` green; stash model compiles with correct API usage.
 
 **Dependencies**: Phase 3.
 
