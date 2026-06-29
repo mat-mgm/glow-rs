@@ -1,0 +1,1 @@
+// TuiConfig — TUI-specific configuration.

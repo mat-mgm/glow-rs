@@ -1,0 +1,32 @@
+[package]
+name = "glow-rs"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.82"
+description = "A Rust port of Glow (github.com/charmbracelet/glow/v2), the terminal Markdown reader."
+license = "MIT"
+repository = "local"
+
+[[bin]]
+name = "glow"
+path = "src/main.rs"
+
+[dependencies]
+glamour-rs  = { path = "../glamour-rs" }
+bubbletea-rs = { path = "../bubbletea-rs" }
+lipgloss-rs = { path = "../lipgloss-rs" }
+bubbles-rs  = { path = "../bubbles-rs" }
+
+clap        = { version = "4", features = ["derive", "env"] }
+serde       = { version = "1", features = ["derive"] }
+serde_yaml  = "0.9"
+ureq        = "2"
+shlex       = "1"
+ignore      = "0.4"
+fuzzy-matcher = "0.3"
+humantime   = "2"
+notify      = "6"
+arboard     = "3"
+dirs        = "5"
+unicode-width = "0.2"
+regex       = "1"
