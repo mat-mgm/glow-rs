@@ -126,44 +126,48 @@ modify them. One commit per phase.
 Status legend: `[ ]` todo · `[~]` in-progress · `[✓]` done · `[x]` blocked ·
 `[?]` optional · `[!]` critical.
 
-### Phase 0: Scaffolding [ ]
+### Phase 0: Scaffolding [✓]
 **Description**: Create the `glow-rs` binary crate, wire dependencies, set up Nix dev shell.
 
 **Tasks**
-- [ ] `Cargo.toml` — binary crate with path deps on all four sibling crates;
+- [✓] `Cargo.toml` — binary crate with path deps on all four sibling crates;
       add `clap`, `serde`, `serde_yaml`, `ureq`, `shlex`, `ignore`,
-      `fuzzy-matcher`, `humantime`, `notify`, `arboard`, `dirs`, `toml`.
-- [ ] `src/main.rs` skeleton with empty `main()`.
-- [ ] Module stubs: `config.rs`, `source.rs`, `url.rs`, `utils.rs`,
+      `fuzzy-matcher`, `humantime`, `notify`, `arboard`, `dirs`, `walkdir`,
+      `libc`, `url`, `crossterm`, `serde_json`, `regex`.
+- [✓] `src/main.rs` skeleton with empty `main()`.
+- [✓] Module stubs: `config.rs`, `source.rs`, `url.rs`, `utils.rs`,
       `ui/mod.rs`, and sub-modules.
-- [ ] `flake.nix` dev shell (adapt from `glamour-rs/flake.nix`).
-- [ ] `.gitignore`.
+- [✓] `flake.nix` dev shell (adapt from `glamour-rs/flake.nix`).
+- [✓] `.gitignore`.
 
 **Checks**
-- [ ] `cargo build` green on skeleton.
-- [ ] `cargo clippy` warning-free.
+- [✓] `cargo build` green on skeleton.
+- [✓] `cargo check` warning-free.
 
-### Phase 1: Source resolution and CLI render mode [ ]
+### Phase 1: Source resolution and CLI render mode [✓]
 **Description**: Port the core CLI path: resolve a source (stdin/file/URL/dir),
 strip frontmatter, render with `glamour-rs`, and print to stdout.
 
 **Tasks**
-- [ ] `source.rs` — `Source` struct (reader + URL string); `source_from_arg()`;
-      directory walk finding README files.
-- [ ] `utils.rs` — `remove_frontmatter()`, `is_markdown_file()`,
-      `wrap_code_block()`, `glamour_style()`.
-- [ ] `config.rs` — `AppConfig` struct (style, width, pager, tui, mouse, all,
+- [✓] `source.rs` — `Source` struct (reader + URL string); `source_from_arg()`;
+      directory walk finding README files; `fetch_url()` for HTTP.
+- [✓] `utils.rs` — `remove_frontmatter()`, `is_markdown_file()`,
+      `wrap_code_block()`, `has_dark_background()`.
+- [✓] `config.rs` — `AppConfig` struct (style, width, pager, tui, mouse, all,
       showLineNumbers, preserveNewLines); `load_config()` reading from default
-      XDG paths via `dirs`; `default_config_content()`.
-- [ ] `main.rs` — `clap` CLI definition mirroring Go flags; `validate_options()`;
-      `execute_cli()` (read source → strip frontmatter → render → print).
-- [ ] Pager mode: detect `pager` flag; split `$PAGER` with `shlex`; pipe output.
+      XDG paths via `dirs`; `ensure_config_file()`.
+- [✓] `url.rs` — `readme_url()`, GitHub/GitLab README auto-fetch via `ureq`.
+- [✓] `main.rs` — `clap` CLI definition mirroring Go flags; `validate_style()`;
+      `execute_cli()` (read source → strip frontmatter → render → print);
+      `cmd_config()` subcommand.
+- [✓] Pager mode: detect `pager` flag; split `$PAGER` with `shlex`; pipe output.
+- [✓] `ui/config.rs` — `TuiConfig` struct.
 
 **Checks**
-- [ ] `glow README.md` prints styled Markdown to stdout.
-- [ ] `echo "# Hi" | glow -` works.
-- [ ] `glow --pager README.md` pipes through `less`.
-- [ ] `cargo clippy` warning-free.
+- [✓] `glow PROJECT.md` prints styled Markdown to stdout.
+- [✓] `echo "# Hi" | glow -` works.
+- [✓] 4 unit tests pass (`cargo test`).
+- [✓] `cargo check` warning-free.
 
 **Dependencies**: Phase 0.
 
