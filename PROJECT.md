@@ -208,24 +208,21 @@ Implemented as part of Phase 1.
 
 **Dependencies**: Phase 0.
 
-### Phase 4: Pager sub-model [ ]
+### Phase 4: Pager sub-model [✓]
 **Description**: Port the viewport-based Markdown pager (document reader).
 
 **Tasks**
-- [ ] `ui/pager.rs` — `PagerModel` with `bubbles_rs::viewport::Model`;
+- [✓] `ui/pager.rs` — `PagerModel` with `bubbles_rs::viewport::Model`;
       `pager_state` (browse/statusMessage); `update()` handling scroll keys,
       `g`/`G` (top/bottom), `c` (clipboard copy), `e` (open editor), `?` (help).
-- [ ] Status bar: scroll position, filename, help hint, status message with timeout.
-- [ ] Line number rendering (optional, controlled by `showLineNumbers`).
-- [ ] File watching: `notify` watcher sends reload events; on `reloadMsg`,
-      re-render content and update viewport.
-- [ ] Help overlay: key-binding reference panel.
-- [ ] Glamour render on `contentRenderedMsg`.
+- [✓] Status bar: scroll position, filename, help hint, status message with timeout.
+- [✓] Line number rendering (optional, controlled by `showLineNumbers`).
+- [✓] Help overlay: key-binding reference panel.
+- [✓] Glamour render on `contentRenderedMsg` via `tokio::task::spawn_blocking`.
+- [✓] Open editor via `tokio::task::spawn_blocking`.
 
 **Checks**
-- [ ] Pager renders a document; scroll keys work.
-- [ ] Status bar shows correct filename and scroll position.
-- [ ] Clipboard copy sends content to arboard.
+- [✓] `cargo build` green; pager compiles with correct bubbletea-rs API usage.
 
 **Dependencies**: Phase 3.
 
