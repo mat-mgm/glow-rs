@@ -65,27 +65,10 @@ fn source_from_dir(dir: &str) -> Result<Source, BoxError> {
     Err("missing markdown source".into())
 }
 
-/// Detect whether stdin is a pipe (data available to read).
+/// Detect whether stdin is a pipe or redirected (not an interactive TTY).
 pub fn stdin_is_pipe() -> bool {
-    use std::os::unix::fs::FileTypeExt;
-    if let Ok(meta) = fs::metadata("/dev/stdin") {
-        let ft = meta.file_type();
-        return ft.is_fifo() || ft.is_char_device() == false || meta.len() > 0;
-    }
-    // fallback: try stat on stdin fd
-    is_stdin_pipe_via_stat()
-}
-
-fn is_stdin_pipe_via_stat() -> bool {
-    use std::os::unix::io::AsRawFd;
-    let fd = io::stdin().as_raw_fd();
-    unsafe {
-        let mut stat: libc::stat = std::mem::zeroed();
-        if libc::fstat(fd, &mut stat) != 0 { return false; }
-        // S_IFIFO = 0o010000, S_IFCHR = 0o020000
-        let mode = stat.st_mode & libc::S_IFMT;
-        mode == libc::S_IFIFO || (mode == libc::S_IFCHR && stat.st_size > 0)
-    }
+    use std::io::IsTerminal;
+    !io::stdin().is_terminal()
 }
 
 /// Fetch content from an HTTP/HTTPS URL.
@@ -138,6 +121,19 @@ mod tests {
         assert!(is_http_url("http://example.com/file.md"));
         assert!(!is_http_url("file.md"));
         assert!(!is_http_url("github://user/repo"));
+    }
+
+    #[test]
+    fn test_source_from_arg_missing_file() {
+        let result = source_from_arg("/nonexistent/path/to/file.md");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_source_from_arg_dir_no_readme() {
+        let dir = tempfile::tempdir().unwrap();
+        let result = source_from_arg(dir.path().to_str().unwrap());
+        assert!(result.is_err());
     }
 }
 

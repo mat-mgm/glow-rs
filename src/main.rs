@@ -32,11 +32,11 @@ struct Cli {
     config: Option<String>,
 
     /// Display with pager
-    #[arg(short = 'p', long)]
+    #[arg(short = 'p', long, num_args(0..=1), default_missing_value("true"), require_equals(true))]
     pager: Option<bool>,
 
     /// Display with TUI
-    #[arg(short = 't', long)]
+    #[arg(short = 't', long, num_args(0..=1), default_missing_value("true"), require_equals(true))]
     tui: Option<bool>,
 
     /// Style name or JSON path
@@ -48,19 +48,19 @@ struct Cli {
     width: Option<u32>,
 
     /// Show all files including hidden (TUI-mode only)
-    #[arg(short = 'a', long)]
+    #[arg(short = 'a', long, num_args(0..=1), default_missing_value("true"), require_equals(true))]
     all: Option<bool>,
 
     /// Show line numbers (TUI-mode only)
-    #[arg(short = 'l', long = "line-numbers")]
+    #[arg(short = 'l', long = "line-numbers", num_args(0..=1), default_missing_value("true"), require_equals(true))]
     line_numbers: Option<bool>,
 
     /// Preserve newlines in output
-    #[arg(short = 'n', long = "preserve-new-lines")]
+    #[arg(short = 'n', long = "preserve-new-lines", num_args(0..=1), default_missing_value("true"), require_equals(true))]
     preserve_new_lines: Option<bool>,
 
     /// Enable mouse wheel (TUI-mode only)
-    #[arg(short = 'm', long, hide = true)]
+    #[arg(short = 'm', long, hide = true, num_args(0..=1), default_missing_value("true"), require_equals(true))]
     mouse: Option<bool>,
 
     #[command(subcommand)]
@@ -228,7 +228,7 @@ fn pipe_to_pager(content: &str) -> Result<(), BoxError> {
 
 fn validate_style(style: &str) -> Result<(), BoxError> {
     match style {
-        "auto" | "dark" | "light" | "dracula" | "tokyo-night" | "ascii" | "notty" => Ok(()),
+        "" | "auto" | "dark" | "light" | "dracula" | "tokyo-night" | "ascii" | "notty" => Ok(()),
         _ => {
             // Check if it's a JSON file path.
             if std::path::Path::new(style).exists() {

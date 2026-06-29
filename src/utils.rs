@@ -91,4 +91,20 @@ mod tests {
         assert!(out.starts_with("```.rs\n"));
         assert!(out.ends_with("```"));
     }
+
+    #[test]
+    fn test_remove_frontmatter_windows_line_endings() {
+        let input = b"---\r\ntitle: Test\r\n---\r\n# Hello\r\n";
+        let out = remove_frontmatter(input);
+        assert_eq!(out, b"# Hello\r\n");
+    }
+
+    #[test]
+    fn test_is_markdown_file_extensions() {
+        assert!(is_markdown_file("doc.mdown"));
+        assert!(is_markdown_file("doc.mkdn"));
+        assert!(is_markdown_file("doc.mkd"));
+        assert!(!is_markdown_file("image.png"));
+        assert!(!is_markdown_file("data.json"));
+    }
 }

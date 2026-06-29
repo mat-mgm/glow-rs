@@ -266,18 +266,24 @@ path from main; end-to-end validation.
 
 **Dependencies**: Phases 4, 5.
 
-### Phase 7: Polish, tests, and final validation [~]
+### Phase 7: Polish, tests, and final validation [✓]
 **Description**: Clippy sweep, unit tests, examples, documentation.
 
 **Tasks**
-- [✓] Unit tests: `remove_frontmatter`, `is_markdown_file`, `wrap_code_block`,
-      `source_from_arg` (local file + dir/readme), `relative_time`, `is_http_url`.
-- [✓] `cargo build`, `cargo check` all green, zero warnings (9 tests pass).
+- [✓] Unit tests: `remove_frontmatter` (incl. CRLF), `is_markdown_file`
+      (all extensions), `wrap_code_block`, `source_from_arg` (file, dir/readme,
+      missing, dir-no-readme), `relative_time`, `is_http_url`.
+- [✓] `cargo build`, `cargo check` all green, zero warnings (13 tests pass).
 - [✓] `tempfile` dev-dependency for filesystem tests.
+- [✓] Boolean CLI flags fixed: `--flag` (bare) now implies `true` via
+      `num_args(0..=1)` + `default_missing_value("true")` + `require_equals(true)`.
+- [✓] `stdin_is_pipe()` simplified using stable `std::io::IsTerminal` trait.
+- [✓] `FetchedMarkdownMsg` now preserves `note` and `modtime` from stash.
+- [✓] `validate_style` accepts empty string (passes through to `auto`).
 
 **Checks**
-- [✓] 9 unit tests pass.
+- [✓] 13 unit tests pass.
 - [✓] Zero compiler warnings.
-- [ ] Edge-case and integration testing (ongoing).
+- [✓] CLI smoke tests: file, dir, stdin, `--style`, `--width`, error cases.
 
 **Dependencies**: Phases 1–6.

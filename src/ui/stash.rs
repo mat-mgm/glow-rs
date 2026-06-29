@@ -324,8 +324,10 @@ impl StashModel {
     pub fn open_markdown_cmd(&mut self, md: Markdown) -> Option<Cmd> {
         self.view_state = StashViewState::LoadingDocument;
         let path = md.local_path.clone();
+        let note = md.note.clone();
+        let modtime = md.modtime;
         let tick = self.spinner.tick();
-        let load = load_local_markdown_cmd(path);
+        let load = load_local_markdown_cmd(path, note, modtime);
         batch(vec![Some(load), Some(tick)])
     }
 
@@ -705,7 +707,7 @@ fn indent(s: &str, n: usize) -> String {
         .join("\n")
 }
 
-fn load_local_markdown_cmd(path: String) -> Cmd {
+fn load_local_markdown_cmd(path: String, note: String, modtime: std::time::SystemTime) -> Cmd {
     cmd(async move {
         match tokio::fs::read_to_string(&path).await {
             Ok(body) => {
@@ -713,8 +715,8 @@ fn load_local_markdown_cmd(path: String) -> Cmd {
                     local_path: path,
                     filter_value: String::new(),
                     body,
-                    note: String::new(),
-                    modtime: std::time::SystemTime::now(),
+                    note,
+                    modtime,
                 })))
             }
             Err(e) => Some(msg(StashErrMsg(e.to_string()))),
