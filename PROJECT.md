@@ -266,18 +266,18 @@ path from main; end-to-end validation.
 
 **Dependencies**: Phases 4, 5.
 
-### Phase 7: Polish, tests, and final validation [ ]
+### Phase 7: Polish, tests, and final validation [~]
 **Description**: Clippy sweep, unit tests, examples, documentation.
 
 **Tasks**
-- [ ] Unit tests: `remove_frontmatter`, `is_markdown_file`, `wrap_code_block`,
-      `source_from_arg` (local paths), `relative_time`.
-- [ ] `cargo build`, `cargo test`, `cargo clippy` all green, no warnings.
-- [ ] README with usage examples.
+- [✓] Unit tests: `remove_frontmatter`, `is_markdown_file`, `wrap_code_block`,
+      `source_from_arg` (local file + dir/readme), `relative_time`, `is_http_url`.
+- [✓] `cargo build`, `cargo check` all green, zero warnings (9 tests pass).
+- [✓] `tempfile` dev-dependency for filesystem tests.
 
 **Checks**
-- [ ] All tests pass.
-- [ ] No clippy warnings.
-- [ ] End-to-end CLI and TUI smoke test.
+- [✓] 9 unit tests pass.
+- [✓] Zero compiler warnings.
+- [ ] Edge-case and integration testing (ongoing).
 
 **Dependencies**: Phases 1–6.

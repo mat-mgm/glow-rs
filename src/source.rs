@@ -109,6 +109,38 @@ pub fn is_url(s: &str) -> bool {
     s.contains("://")
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+
+    #[test]
+    fn test_source_from_arg_file() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("test.md");
+        fs::write(&path, b"# Hello\n").unwrap();
+        let src = source_from_arg(path.to_str().unwrap()).unwrap();
+        assert_eq!(src.content, b"# Hello\n");
+    }
+
+    #[test]
+    fn test_source_from_arg_dir_readme() {
+        let dir = tempfile::tempdir().unwrap();
+        let readme = dir.path().join("README.md");
+        fs::write(&readme, b"# Readme\n").unwrap();
+        let src = source_from_arg(dir.path().to_str().unwrap()).unwrap();
+        assert_eq!(src.content, b"# Readme\n");
+    }
+
+    #[test]
+    fn test_is_http_url() {
+        assert!(is_http_url("https://example.com/file.md"));
+        assert!(is_http_url("http://example.com/file.md"));
+        assert!(!is_http_url("file.md"));
+        assert!(!is_http_url("github://user/repo"));
+    }
+}
+
 /// Compute a base URL from an absolute source URL for glamour image resolution.
 pub fn base_url_from_source(url: &str) -> Option<String> {
     if !is_url(url) { return None; }
