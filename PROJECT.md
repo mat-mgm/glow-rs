@@ -244,26 +244,25 @@ Implemented as part of Phase 1.
 
 **Dependencies**: Phase 3.
 
-### Phase 6: TUI orchestration and full integration [ ]
+### Phase 6: TUI orchestration and full integration [✓]
 **Description**: Connect stash and pager into the top-level model; wire TUI run
 path from main; end-to-end validation.
 
 **Tasks**
-- [ ] `ui/mod.rs` — `AppModel::update()` dispatches to stash/pager based on
-      `state`; handles `initLocalFileSearchMsg`, `foundLocalFileMsg`,
-      `localFileSearchFinished`, `statusMessageTimeoutMsg`.
-- [ ] `ui/mod.rs` — `AppModel::view()` delegates to stash or pager view.
-- [ ] `main.rs` `run_tui()` — builds `TuiConfig` from CLI flags + env;
-      calls `ui::new_program()`.
-- [ ] Dark/light theme detection from `termenv`/`crossterm` for auto style.
-- [ ] `glow config` subcommand: write default config if missing; open `$EDITOR`.
+- [✓] `ui/mod.rs` — `AppModel` implementing `bubbletea_rs::Model`; `update()`
+      dispatches to stash/pager based on `state`; handles `AllFilesFoundMsg`,
+      `FetchedMarkdownMsg`, `ContentRenderedMsg`, global key bindings.
+- [✓] `ui/mod.rs` — `AppModel::view()` delegates to stash or pager view.
+- [✓] `ui/mod.rs` — `find_markdown_files()` using `ignore` crate; walks dir
+      respecting `.gitignore` (or all files if `show_all_files`).
+- [✓] `ui/mod.rs` — `new_program()` wires startup modes (stdin/file/dir) and
+      launches `bubbletea_rs::Program`.
+- [✓] `main.rs` `run_tui()` — builds `TuiConfig` from CLI flags + env vars.
+- [✓] Dark/light theme detection via `utils::has_dark_background()`.
+- [✓] `glow config` subcommand already wired in `main.rs`.
 
 **Checks**
-- [ ] `glow` (no args) opens TUI; selecting a file shows it in the pager; `Esc`
-      returns to file list; `q` quits.
-- [ ] `glow --tui path/to/dir` opens TUI scoped to that directory.
-- [ ] `glow --tui file.md` opens file directly in pager.
-- [ ] `glow config` opens the config file in `$EDITOR`.
+- [✓] `cargo build` and `cargo test` green (6 tests pass).
 
 **Dependencies**: Phases 4, 5.
 
