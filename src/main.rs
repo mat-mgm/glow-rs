@@ -165,8 +165,11 @@ fn execute_cli(
     let is_code = !is_markdown_file(&src.url);
     let style = resolve_glamour_style(&cfg.style, is_code);
 
+    use std::io::IsTerminal;
+    let hyperlinks = std::io::stdout().is_terminal();
     let renderer = TermRenderer::new(style)?
-        .with_word_wrap(cfg.width as usize);
+        .with_word_wrap(cfg.width as usize)
+        .with_hyperlinks(hyperlinks);
 
     let raw_content = String::from_utf8_lossy(content_bytes);
     let content = if is_code {
