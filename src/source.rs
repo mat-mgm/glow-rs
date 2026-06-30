@@ -65,8 +65,20 @@ fn source_from_dir(dir: &str) -> Result<Source, BoxError> {
     Err("missing markdown source".into())
 }
 
-/// Detect whether stdin is a pipe or redirected (not an interactive TTY).
+/// Detect whether stdin is a pipe or redirected file.
+///
+/// Mirrors Go's `stdinIsPipe()`: returns true when stdin is NOT a character
+/// device (i.e. an actual pipe or regular file) OR has data waiting (size > 0).
+/// Terminals and /dev/null are char devices with size 0 → returns false.
 pub fn stdin_is_pipe() -> bool {
+    unsafe {
+        let mut st: libc::stat = std::mem::zeroed();
+        if libc::fstat(libc::STDIN_FILENO, &mut st) == 0 {
+            let is_char_device = (st.st_mode & libc::S_IFMT as u32) == libc::S_IFCHR as u32;
+            return !is_char_device || st.st_size > 0;
+        }
+    }
+    // Fallback.
     use std::io::IsTerminal;
     !io::stdin().is_terminal()
 }
