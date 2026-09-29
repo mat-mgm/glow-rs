@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Compile and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout bubbletea-rs
+        uses: actions/checkout@v4
+        with:
+          repository: mat-mgm/bubbletea-rs
+          path: bubbletea-rs
+
+      - name: Checkout lipgloss-rs
+        uses: actions/checkout@v4
+        with:
+          repository: mat-mgm/lipgloss-rs
+          path: lipgloss-rs
+
+      - name: Checkout bubbles-rs
+        uses: actions/checkout@v4
+        with:
+          repository: mat-mgm/bubbles-rs
+          path: bubbles-rs
+
+      - name: Checkout glamour-rs
+        uses: actions/checkout@v4
+        with:
+          repository: mat-mgm/glamour-rs
+          path: glamour-rs
+
+      - name: Checkout glow-rs
+        uses: actions/checkout@v4
+        with:
+          path: glow-rs
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo check
+        run: cargo check --all-targets --all-features
+        working-directory: glow-rs
+
+      - name: Cargo test
+        run: cargo test
+        working-directory: glow-rs
